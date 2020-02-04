@@ -1,13 +1,19 @@
 package idcenter;
 
 
+import entities.Documentrequest;
 import java.awt.*;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.time.LocalDate;
+import java.util.*;
+import javax.persistence.*;
 
 
 public class Interface extends Frame {
+    
+    EntityManagerFactory emf = Persistence.createEntityManagerFactory("IdCenterPU");
+    EntityManager em = emf.createEntityManager();
     
     TextField jmbg,ime, prezime, imeMajke, imeOca, prezimeMajke, prezimeOca, 
             nacionalnost, profesija, opstina, ulica, broj;
@@ -18,7 +24,7 @@ public class Interface extends Frame {
     TextField reqId;
     Label status, selectedId;
     Button traziStatus, uruciDokument;
-    
+    int ID = 0;
     public Interface(){
         super("IDCenter");
         
@@ -46,6 +52,7 @@ public class Interface extends Frame {
         kreirajZahtev = new Button("Kreiraj Zahtev");
         traziStatus = new Button("Trazi Status");
         uruciDokument = new Button("Uruci");
+        uruciDokument.setEnabled(false);
         selectedId = new Label("");
         status = new Label("");
         
@@ -167,6 +174,10 @@ public class Interface extends Frame {
         chkPan.add(uruciDokument);
         add(chkPan, BorderLayout.SOUTH);
         
+        kreirajZahtev.addActionListener(new CreateRequest(this));
+        traziStatus.addActionListener(new CheckStatus(this));
+        uruciDokument.addActionListener(new HandOut(this));
+        
         setVisible(true);
         setSize(455, 800);
         
@@ -177,5 +188,15 @@ public class Interface extends Frame {
             }
             
         });
+        
+        java.util.List<Documentrequest> lst = em.createNamedQuery("Documentrequest.findAll").getResultList();
+        int curr = 0;
+        for(Documentrequest dr: lst){
+            curr = Integer.parseInt(dr.getId().substring(5));
+            if(curr >= ID){
+                ID = curr+1;
+            }
+        }
+        
     }
 }
