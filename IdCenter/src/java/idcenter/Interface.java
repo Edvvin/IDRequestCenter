@@ -11,10 +11,7 @@ import javax.persistence.*;
 
 
 public class Interface extends Frame {
-    
-    EntityManagerFactory emf = Persistence.createEntityManagerFactory("IdCenterPU");
-    EntityManager em = emf.createEntityManager();
-    
+        
     TextField jmbg,ime, prezime, imeMajke, imeOca, prezimeMajke, prezimeOca, 
             nacionalnost, profesija, opstina, ulica, broj;
     Choice brak, godina, mesec, dan;
@@ -189,7 +186,7 @@ public class Interface extends Frame {
             
         });
         
-        java.util.List<Documentrequest> lst = em.createNamedQuery("Documentrequest.findAll").getResultList();
+        java.util.List<Documentrequest> lst = Main.em.createNamedQuery("Documentrequest.findAll").getResultList();
         int curr = 0;
         for(Documentrequest dr: lst){
             curr = Integer.parseInt(dr.getId().substring(5));
@@ -198,5 +195,9 @@ public class Interface extends Frame {
             }
         }
         
+    }
+
+    void showMessage(String string) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 }
