@@ -60,7 +60,7 @@ public class CreateRequest implements ActionListener{
         
         
         // creating an instance
-        String newId = String.format("%07d", gui.ID);
+        String newId = String.format("%07d", gui.ID++);
         Documentrequest dr = new Documentrequest(Main.centerId+newId);
         String temp;
         temp = gui.jmbg.getText();
@@ -99,7 +99,7 @@ public class CreateRequest implements ActionListener{
         temp+= "-";
         temp+=gui.dan.getSelectedItem();
         dr.setDatumRodjenja(temp);
-        dr.setStanje("kreiran"); // TODO: change to setStatus
+        dr.setStanje("kreiran");
         
         // persist in database
         Main.em.getTransaction().begin();
@@ -110,7 +110,7 @@ public class CreateRequest implements ActionListener{
         // add to JMS Queue
         TextMessage msg = Main.context.createTextMessage(newId);
         Main.producer.send(Main.queue, msg);
-        gui.showMessage("Request created with id: " + newId);
+        gui.showMessage("Request created with id: " + Main.centerId + newId);
     }
     
 }

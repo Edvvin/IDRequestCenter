@@ -44,8 +44,15 @@ public class Main {
                 Message msg = consumer.receive();
                 TextMessage tmsg = (TextMessage) msg;
                 String id = tmsg.getText();
-                Documentrequest dr = (Documentrequest) em.createNamedQuery("Documentrequest.findById")
-                        .setParameter("id", id).getSingleResult();
+                java.util.List<Documentrequest> lst = em.createNamedQuery("Documentrequest.findById")
+                        .setParameter("id", id).getResultList();
+                if(lst.size() == 0){
+                    tmsg = context.createTextMessage(id);
+                    producer.send(queue, tmsg);
+                    continue;
+                }
+                    
+                Documentrequest dr = lst.get(0);
                 JSONObject obj = new JSONObject();
                 obj.put("id",dr.getId());
                 obj.put("ime",dr.getIme());
@@ -70,16 +77,15 @@ public class Main {
                 HttpURLConnection submitConnection = (HttpURLConnection) url.openConnection();
                 submitConnection.setRequestMethod("POST");
                 submitConnection.setDoOutput(true);
-                PrintWriter pw = new PrintWriter(submitConnection.getOutputStream());
-                pw.write(obj.toString());
-                pw.flush();
-                pw.close();
+                OutputStream os = submitConnection.getOutputStream();
+                os.write(obj.toString().getBytes());
+                os.flush();
+                os.close();
                 
                 int rcode = submitConnection.getResponseCode();
                 if(rcode != 200){
                     tmsg = context.createTextMessage(id);
                     producer.send(queue, tmsg);
-                    return;
                 }else{
                     dr.setStanje("uProdukciji");
                     em.getTransaction().begin();
