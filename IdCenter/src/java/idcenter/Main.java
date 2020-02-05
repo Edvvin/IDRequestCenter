@@ -19,7 +19,6 @@ public class Main {
     }
     
     public static final String checkTermin = "http://collabnet.netset.rs:8081/is/terminCentar/checkTimeslotAvailability";
-    public static final String submitPerso = "http://collabnet.netset.rs:8081/is/persoCentar/submit";
     public static final String checkPerso = "http://collabnet.netset.rs:8081/is/persoCentar";
     public static final String centerId = "17117";
     
