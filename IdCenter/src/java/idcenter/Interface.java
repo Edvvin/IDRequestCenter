@@ -3,6 +3,8 @@ package idcenter;
 
 import entities.Documentrequest;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.time.LocalDate;
@@ -197,7 +199,32 @@ public class Interface extends Frame {
         
     }
 
-    void showMessage(String string) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    void showMessage(String msg) {
+        new Dialog(this, "Message"){
+            {
+                setLayout(new FlowLayout(FlowLayout.CENTER));
+                add(new Label(msg));
+                Button okBtn = new Button("Ok");
+                okBtn.setPreferredSize(new Dimension(55,30));
+                add(okBtn);
+                okBtn.addActionListener(new ActionListener() {
+                    @Override
+                    public void actionPerformed(ActionEvent e) {
+                        dispose();
+                    }
+                });
+                
+                addWindowListener(new WindowAdapter(){
+
+                    @Override
+                    public void windowClosing(WindowEvent e) {
+                        dispose();
+                    }
+                    
+                });
+                setSize(400,150);
+                setVisible(true);
+            }
+        };
     }
 }

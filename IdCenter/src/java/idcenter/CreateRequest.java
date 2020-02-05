@@ -21,21 +21,9 @@ import org.json.simple.parser.ParseException;
 
 public class CreateRequest implements ActionListener{
     private Interface gui;
-    
-    
-    @Resource(lookup = "jms/__defaultConnectionFactory")
-    private static ConnectionFactory connectionFactory;
-    
-    @Resource(lookup = "myQueue")
-    private static javax.jms.Queue queue;
-    
-    private JMSContext context;
-    private JMSProducer producer;
-    
+
     public CreateRequest(Interface gui){
         this.gui = gui;
-        context = connectionFactory.createContext();
-        producer = context.createProducer();
     }
     @Override
     public void actionPerformed(ActionEvent e) {
@@ -120,8 +108,8 @@ public class CreateRequest implements ActionListener{
         Main.em.getTransaction().commit();
         
         // add to JMS Queue
-        TextMessage msg = context.createTextMessage(newId);
-        producer.send(queue, msg);
+        TextMessage msg = Main.context.createTextMessage(newId);
+        Main.producer.send(Main.queue, msg);
         gui.showMessage("Request created with id: " + newId);
     }
     
