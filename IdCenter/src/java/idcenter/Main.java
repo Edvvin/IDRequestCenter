@@ -1,6 +1,7 @@
 package idcenter;
 
 import entities.Documentrequest;
+import java.time.LocalDateTime;
 import javax.annotation.Resource;
 import javax.jms.ConnectionFactory;
 import javax.jms.JMSContext;
@@ -15,6 +16,19 @@ import javax.persistence.Persistence;
 public class Main {
     
     public static String getTermin(){
+        LocalDateTime ldt = LocalDateTime.now();
+        String res = "";
+        res+=ldt.getYear();
+        res+="-";
+        res+=String.format("%02d",ldt.getMonthValue());
+        res+="-";
+        res+=String.format("%02d",ldt.getDayOfMonth());
+        res+="T";
+        res+=String.format("%02d",ldt.getHour());
+        res+=":";
+        res+=String.format("%02d",ldt.getMinute());
+        res+=":";
+        res+=String.format("%02d",ldt.getSecond());
         return "2020-02-24T16:45:00";
     }
     

@@ -188,15 +188,6 @@ public class Interface extends Frame {
             
         });
         
-        java.util.List<Documentrequest> lst = Main.em.createNamedQuery("Documentrequest.findAll").getResultList();
-        int curr = 0;
-        for(Documentrequest dr: lst){
-            curr = Integer.parseInt(dr.getId().substring(5));
-            if(curr >= ID){
-                ID = curr+1;
-            }
-        }
-        
     }
 
     void showMessage(String msg) {

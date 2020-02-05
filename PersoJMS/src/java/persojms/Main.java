@@ -47,6 +47,7 @@ public class Main {
                 java.util.List<Documentrequest> lst = em.createNamedQuery("Documentrequest.findById")
                         .setParameter("id", id).getResultList();
                 if(lst.size() == 0){
+                    System.out.println("Not found id: " + id);
                     tmsg = context.createTextMessage(id);
                     producer.send(queue, tmsg);
                     continue;
@@ -71,11 +72,13 @@ public class Main {
                 obj.put("brojPrebivalista",dr.getBrojPrebivalista());
                 obj.put("JMBG",dr.getJmbg());
                 
+                System.out.println("Json: " + obj.toString());
                 // attempting to send the document request to perso
                 
                 URL url = new URL(submitPerso);
                 HttpURLConnection submitConnection = (HttpURLConnection) url.openConnection();
                 submitConnection.setRequestMethod("POST");
+                submitConnection.setRequestProperty("Content-Type", "application/json");
                 submitConnection.setDoOutput(true);
                 OutputStream os = submitConnection.getOutputStream();
                 os.write(obj.toString().getBytes());
@@ -84,6 +87,7 @@ public class Main {
                 
                 int rcode = submitConnection.getResponseCode();
                 if(rcode != 200){
+                    System.out.println("Failed to send: " + rcode);
                     tmsg = context.createTextMessage(id);
                     producer.send(queue, tmsg);
                 }else{
